@@ -2,6 +2,12 @@
   "files.associations": {
     "*.ejs": "html",
     "optional": "cpp",
-    "cmath": "cpp"
+    "cmath": "cpp",
+    "iostream": "cpp",
+    "limits": "cpp",
+    "ostream": "cpp",
+    "new": "cpp",
+    "memory": "cpp",
+    "istream": "cpp"
   }
 }

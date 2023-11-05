@@ -5,21 +5,20 @@
 #include <ctime>
 #include <cmath>
 
-#include "sajathiba.cpp"
+#include "hiba/sajathiba.cpp"
+#include "palya/palya.cpp"
+#include "rand/rand.h"
 using namespace std;
 
-int getRandom(int min, int max)
-{
-    std::srand(std::time(nullptr)); // idó állítás hogy a mindog más random értékek legyenek
-    return min + (rand() % (max - min + 1));
-};
+// pálya 2d dinamikus tömb elemei egy hely osztály típú elemm ami tartalmaz egy listát a helyen lévő előlényekról
 
 int main(int argc, char const *argv[])
 {
-    int jatekosok_szama = 0;
+
+    int eloleny_szama = 0;
     int palyameret = 0;
     double palyameret_hiba = false;
-    double jatekosok_hiba = false;
+    double eloleny_hiba = false;
     // pálya méret beolvasása és hiba kezelése
     while (!palyameret_hiba)
     {
@@ -53,32 +52,36 @@ int main(int argc, char const *argv[])
         }
         catch (const std::out_of_range &e)
         {
-            std::cerr << e.what() << '\n';
+            std::cerr << "out of range: " << e.what() << '\n';
         }
     }
 
-    // jatekosok számának beolvasás a és hiba kezelése
-    while (!jatekosok_hiba)
+    // jatekosok számának beolvasása és hiba kezelése
+    while (!eloleny_hiba)
     {
         try
         {
             string valasz;
-            cout << "Mennyi jatekost szertne (Ha nem ad meg semmi akkor veletlen darab lesz) :";
+            cout << "Mennyi eloleny szertne (Ha nem ad meg semmi akkor veletlen darab lesz) :";
             getline(cin, valasz);
             if (valasz == "")
             {
-                jatekosok_szama = getRandom(2, pow(palyameret, 2));
-                cout << "Random jatekosok szama: " << jatekosok_szama << endl;
+                eloleny_szama = Randomszam::getRandom(2, pow(palyameret, 2));
+                cout << "Random jatekosok szama: " << eloleny_szama << endl;
             }
             else
             {
-                jatekosok_szama = stoi(valasz);
-                if (jatekosok_szama > pow(palyameret, 2))
+                eloleny_szama = stoi(valasz);
+                if (eloleny_szama > pow(palyameret, 2))
                 {
-                    throw sajathiba("Ennyi jatekost nem lehet generalni");
+                    throw sajathiba("Ennyi eloleny nem lehet generalni");
+                }
+                if (eloleny_szama < 2)
+                {
+                    throw sajathiba("Keves eloleny legalabb 2 kell");
                 }
             }
-            jatekosok_hiba = true;
+            eloleny_hiba = true;
         }
         catch (const std::invalid_argument &e)
         {
@@ -89,6 +92,39 @@ int main(int argc, char const *argv[])
             std::cerr << e.what() << '\n';
         }
         catch (const std::out_of_range &e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
+    Palya palya(palyameret);
+    palya.elolenyek_letrehozasa(eloleny_szama);
+    palya.palya_rajzolas();
+    string valasz;
+    while (palya.get_korokszama() < 20)
+    {
+        try
+        {
+            cout << "\n"
+                 << endl;
+            cout << "Korok szama: " << palya.get_korokszama() << endl;
+            cout << "\n"
+                 << endl;
+            cout << "Menu opciok:" << endl;
+            cout << "------------------------------------" << endl;
+            cout << "1 - [Enter] Jatek folytatasa" << endl;
+            cout << "2 - k Kilepes" << endl;
+            getline(cin, valasz);
+            if (valasz == "" || valasz == "1")
+            {
+                cout << "fight" << endl;
+                palya.jatek();
+            }
+            else if (valasz == "2" || valasz == "k")
+            {
+                break;
+            }
+        }
+        catch (const std::exception &e)
         {
             std::cerr << e.what() << '\n';
         }
