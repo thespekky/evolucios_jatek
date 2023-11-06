@@ -26,7 +26,6 @@ public:
                 palya_tmp[i].push_back(nullptr);
             }
         }
-        // palya[5][5] = new Eloleny(0, 1);
     };
     void palya_rajzolas()
     {
@@ -43,7 +42,6 @@ public:
             }
         }
         cout << endl;
-        // cout << "0   1   2   3   4   5   6   7   8   9   10  11  12  13  14" << endl;
         for (int i = 0; i < meret; i++)
         {
             if (i < 10)
@@ -68,42 +66,13 @@ public:
             cout << endl;
         }
     }
-    /*
-                1   2   3   4   5   6   7   8   9   10  11  12  13  14
-            1 | 1 | 0 | 2 | 0 | 1 | 0 | 2 | 0 | 1 | 0 | 2 | 0 | 1 | 0 | 2
-            2 | 1 | 0 | 2 | 0 | 1 | 0 | 2 | 0 | 1 | 0 | 2 | 0 | 1 | 0 | 2 | 0 |
-            3 | 1 |   | 2 |   |
-            4
-            5
-            6
-            7
-            8
-            9
-            10
-            11
-            12
-            13
-            14
-            15
-    */
     void elolenyek_letrehozasa(const int &db)
     {
         elolenyek_szama = db;
         int x = -1;
         int y = 0;
-        // bool bol;
         for (int i = 0; i < db; i++)
         {
-
-            /*do
-            {
-                x = Randomszam::getRandom(0, meret);
-                y = Randomszam::getRandom(0, meret);
-                cout << "x: " << x << " y: " << y << endl;
-                bol = palya[x][y] != nullptr;
-                cout << bol << endl;
-            } while (palya[x][y] != nullptr);*/
-            // Randomszam::resetseed();
             x += 1;
             if (x >= meret)
             {
@@ -156,6 +125,8 @@ public:
                 }
                 else if (palya[i][j] != nullptr && palya_tmp[i][j] != nullptr)
                 {
+                    // a pályában elmentem azt az elemet ami erősebb
+                    // derefálást végzek ->*(palya_tmp[i][j])
                     palya[i][j] = &(palya[i][j]->operator>(*(palya_tmp[i][j])));
                     elolenyek_szama -= 1;
                 }
@@ -191,15 +162,14 @@ public:
                     {
                         // 0 fel 1 le 2 jobra 3 balra
                         r = Randomszam::getRandom(0, 3);
-                        cout << r << endl;
                         count += 1;
                         palya[i][j]->set_lepett(true);
+                        Eloleny *e = palya[i][j];
                         switch (r)
                         {
                         case 0:
                             if (i == 0)
                             {
-                                Eloleny *e = palya[i][j];
                                 e->change_hely(i + 1, j);
                                 if (palya[i + 1][j] == nullptr)
                                 {
@@ -211,15 +181,11 @@ public:
                                     palya_tmp[i + 1][j] = e;
                                     palya[i][j] = nullptr;
                                 }
-                                /*palya[i + 1][j] = e;
-                                palya[i][j] = nullptr;*/
-                                // palya[i + 1][j] = palya[i][j];
 
                                 break;
                             }
                             else
                             {
-                                Eloleny *e = palya[i][j];
                                 e->change_hely(i - 1, j);
                                 if (palya[i - 1][j] == nullptr)
                                 {
@@ -231,16 +197,12 @@ public:
                                     palya_tmp[i - 1][j] = e;
                                     palya[i][j] = nullptr;
                                 }
-                                /* palya[i - 1][j] = e;
-                                 palya[i][j] = nullptr;*/
-                                // palya[i - 1][j] = palya[i][j];
                                 break;
                             }
                             break;
                         case 1:
                             if (i == meret - 1)
                             {
-                                Eloleny *e = palya[i][j];
                                 e->change_hely(i - 1, j);
                                 if (palya[i - 1][j] == nullptr)
                                 {
@@ -252,17 +214,11 @@ public:
                                     palya_tmp[i - 1][j] = e;
                                     palya[i][j] = nullptr;
                                 }
-                                /*palya[i - 1][j] = e;
-                                palya[i][j] = nullptr;*/
-                                // palya[i + 1][j] = palya[i][j];
                                 break;
                             }
                             else
                             {
-                                Eloleny *e = palya[i][j];
                                 e->change_hely(i + 1, j);
-                                /*palya[i + 1][j] = e;
-                                palya[i][j] = nullptr;*/
                                 if (palya[i + 1][j] == nullptr)
                                 {
                                     palya[i + 1][j] = e;
@@ -273,17 +229,13 @@ public:
                                     palya_tmp[i + 1][j] = e;
                                     palya[i][j] = nullptr;
                                 }
-                                // palya[i - 1][j] = palya[i][j];
                                 break;
                             }
                             break;
                         case 2:
                             if (j == meret - 1)
                             {
-                                Eloleny *e = palya[i][j];
                                 e->change_hely(i, j - 1);
-                                /*palya[i][j - 1] = e;
-                                palya[i][j] = nullptr;*/
                                 if (palya[i][j - 1] == nullptr)
                                 {
                                     palya[i][j - 1] = e;
@@ -294,15 +246,11 @@ public:
                                     palya_tmp[i][j - 1] = e;
                                     palya[i][j] = nullptr;
                                 }
-                                // palya[i][j - 1] = palya[i][j];
                                 break;
                             }
                             else
                             {
-                                Eloleny *e = palya[i][j];
                                 e->change_hely(i, j + 1);
-                                /*palya[i][j + 1] = e;
-                                palya[i][j] = nullptr;*/
                                 if (palya[i][j + 1] == nullptr)
                                 {
                                     palya[i][j + 1] = e;
@@ -313,17 +261,13 @@ public:
                                     palya_tmp[i][j + 1] = e;
                                     palya[i][j] = nullptr;
                                 }
-                                // palya[i][j + 1] = palya[i][j];
                                 break;
                             }
                             break;
                         case 3:
                             if (j == 0)
                             {
-                                Eloleny *e = palya[i][j];
                                 e->change_hely(i, j + 1);
-                                /*palya[i][j + 1] = e;
-                                palya[i][j] = nullptr;*/
                                 if (palya[i][j + 1] == nullptr)
                                 {
                                     palya[i][j + 1] = e;
@@ -334,15 +278,11 @@ public:
                                     palya_tmp[i][j + 1] = e;
                                     palya[i][j] = nullptr;
                                 }
-                                // palya[i][j - 1] = palya[i][j];
                                 break;
                             }
                             else
                             {
-                                Eloleny *e = palya[i][j];
                                 e->change_hely(i, j - 1);
-                                /*palya[i][j - 1] = e;
-                                palya[i][j] = nullptr;*/
                                 if (palya[i][j - 1] == nullptr)
                                 {
                                     palya[i][j - 1] = e;
@@ -353,7 +293,6 @@ public:
                                     palya_tmp[i][j - 1] = e;
                                     palya[i][j] = nullptr;
                                 }
-                                // palya[i][j + 1] = palya[i][j];
                                 break;
                             }
                             break;
@@ -361,11 +300,39 @@ public:
                         default:
                             break;
                         }
-                        // palya[i][j]->change_hely(i, j);
                     }
                 }
-
-            } // asd
+            }
+        }
+    }
+    void vegeredmeny()
+    {
+        int tuleltek = 0;
+        int x, y;
+        cout << "" << endl;
+        cout << "Akik tuletek:" << endl;
+        cout << "---------------------------" << endl;
+        for (int i = 0; i < meret; i++)
+        {
+            for (int j = 0; j < meret; j++)
+            {
+                if (palya[i][j] != nullptr)
+                {
+                    tuleltek++;
+                    x = i;
+                    y = j;
+                    cout << tuleltek << ". "
+                         << "szintje: " << palya[i][j]->get_szint() << " ereje: "
+                         << palya[i][j]->get_ero() << " helye: " << i << " , " << j << endl;
+                }
+            }
+        }
+        if (tuleltek == 1)
+        {
+            cout << "A nyertes eloleny:" << endl;
+            cout << "---------------------------" << endl;
+            cout << "szintje: " << palya[x][y]->get_szint() << " ereje: "
+                 << palya[x][y]->get_ero() << " helye: " << x << " , " << y << endl;
         }
     }
     ~Palya()

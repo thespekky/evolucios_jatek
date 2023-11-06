@@ -7,6 +7,6 @@ void Randomszam::resetseed()
 }
 int Randomszam::getRandom(int min, int max)
 {
-    // std::srand(std::time(nullptr)); // idó állítás hogy a mindog más random értékek legyenek
+
     return min + (rand() % (max - min + 1));
 };

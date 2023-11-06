@@ -10,7 +10,6 @@ class Eloleny
     unsigned x, y;
     unsigned ero;
     unsigned kezdeti_ero;
-    // vector<Eloleny> elolenyek;
 
 public:
     Eloleny(const unsigned &x, const unsigned &y) : lepett(false), szint(1), x(x), y(y), ero(Randomszam::getRandom(0, 100))
@@ -86,23 +85,4 @@ public:
             }
         }
     }
-    /*
-    Eloleny &operator-=(const Eloleny &eloleny)
-    {
-        auto elem = find(elolenyek.begin(), elolenyek.end(), eloleny);
-        if (elem != elolenyek.end())
-        {
-            elolenyek.erase(elem);
-        }
-        return *this;
-    }
-    const vector<Eloleny> &get_elolenyek() const
-    {
-        return elolenyek;
-    }*/
-
-    /* bool operator>(const Eloleny &eloleny)
-     {
-         return false;
-     };*/
 };

@@ -17,8 +17,11 @@ int main(int argc, char const *argv[])
 
     int eloleny_szama = 0;
     int palyameret = 0;
-    double palyameret_hiba = false;
-    double eloleny_hiba = false;
+    bool palyameret_hiba = false;
+    bool eloleny_hiba = false;
+    unsigned osszes_korok_szama = 0;
+    bool osszes_kor_hiba = false;
+
     // pálya méret beolvasása és hiba kezelése
     while (!palyameret_hiba)
     {
@@ -44,15 +47,15 @@ int main(int argc, char const *argv[])
         }
         catch (const sajathiba &e)
         {
-            std::cerr << e.what() << '\n';
+            cerr << e.what() << '\n';
         }
         catch (invalid_argument &error)
         {
-            std::cerr << "Konvertalasi hiba: " << error.what() << '\n';
+            cerr << "Konvertalasi hiba: " << error.what() << '\n';
         }
-        catch (const std::out_of_range &e)
+        catch (const out_of_range &e)
         {
-            std::cerr << "out of range: " << e.what() << '\n';
+            cerr << "Tul hosszu szamot adott meg " << e.what() << '\n';
         }
     }
 
@@ -66,6 +69,7 @@ int main(int argc, char const *argv[])
             getline(cin, valasz);
             if (valasz == "")
             {
+                Randomszam::resetseed();
                 eloleny_szama = Randomszam::getRandom(2, pow(palyameret, 2));
                 cout << "Random jatekosok szama: " << eloleny_szama << endl;
             }
@@ -83,24 +87,62 @@ int main(int argc, char const *argv[])
             }
             eloleny_hiba = true;
         }
-        catch (const std::invalid_argument &e)
+        catch (const invalid_argument &e)
         {
-            std::cerr << e.what() << '\n';
+            cerr << "Konvertalasi hiba: " << '\n';
         }
         catch (const sajathiba &e)
         {
-            std::cerr << e.what() << '\n';
+            cerr << e.what() << '\n';
         }
-        catch (const std::out_of_range &e)
+        catch (const out_of_range &e)
         {
-            std::cerr << e.what() << '\n';
+            cerr << "Tul hosszu szamot adott meg" << '\n';
         }
     }
+    while (!osszes_kor_hiba)
+    {
+        try
+        {
+            string valasz;
+            cout << "Mennyi kort legyen,(ha nem ad szamot akkor 20 lesz): ";
+            getline(cin, valasz);
+            if (valasz == "")
+            {
+                osszes_korok_szama = 20;
+            }
+            else
+            {
+                if (stoi(valasz) <= 0)
+                {
+                    throw sajathiba("Nem lehet 0 vagy negativ a korok szama");
+                }
+                else
+                {
+                    osszes_korok_szama = stoi(valasz);
+                }
+            }
+            osszes_kor_hiba = true;
+        }
+        catch (const invalid_argument &e)
+        {
+            cerr << "Konvertalasi hiba: " << '\n';
+        }
+        catch (const out_of_range &e)
+        {
+            cerr << "Tul hosszu szamot adott meg" << '\n';
+        }
+        catch (const sajathiba &e)
+        {
+            cerr << e.what() << '\n';
+        }
+    }
+
     Palya palya(palyameret);
     palya.elolenyek_letrehozasa(eloleny_szama);
     palya.palya_rajzolas();
     string valasz;
-    while (palya.get_korokszama() < 20)
+    while (palya.get_korokszama() < osszes_korok_szama)
     {
         try
         {
@@ -116,7 +158,6 @@ int main(int argc, char const *argv[])
             getline(cin, valasz);
             if (valasz == "" || valasz == "1")
             {
-                cout << "fight" << endl;
                 palya.jatek();
             }
             else if (valasz == "2" || valasz == "k")
@@ -124,11 +165,11 @@ int main(int argc, char const *argv[])
                 break;
             }
         }
-        catch (const std::exception &e)
+        catch (const exception &e)
         {
-            std::cerr << e.what() << '\n';
+            cerr << e.what() << '\n';
         }
     }
-
+    palya.vegeredmeny();
     return 0;
 }
