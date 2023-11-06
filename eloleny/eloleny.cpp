@@ -1,16 +1,26 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 #include "../rand/rand.h"
 class Eloleny
 {
-    unsigned level;
+    bool lepett;
+    unsigned szint;
     unsigned x, y;
     unsigned ero;
+    unsigned kezdeti_ero;
+    // vector<Eloleny> elolenyek;
 
 public:
-    Eloleny(const unsigned &x, const unsigned &y) : level(1), x(x), y(y), ero(Randomszam::getRandom(0, 100)){};
-    Eloleny() : level(1), x(0), y(0), ero(Randomszam::getRandom(0, 100)){};
+    Eloleny(const unsigned &x, const unsigned &y) : lepett(false), szint(1), x(x), y(y), ero(Randomszam::getRandom(0, 100))
+    {
+        kezdeti_ero = ero;
+    };
+    Eloleny() : lepett(false), szint(1), x(0), y(0), ero(Randomszam::getRandom(0, 100))
+    {
+        kezdeti_ero = ero;
+    };
 
     void change_hely(const int &x, const int &y)
     {
@@ -29,10 +39,68 @@ public:
     {
         return ero;
     }
-    const unsigned &get_level() const
+    const unsigned &get_szint() const
     {
-        return level;
+        return szint;
     }
+    const bool &get_lepett() const
+    {
+        return lepett;
+    }
+    void set_lepett(const bool &b)
+    {
+        lepett = b;
+    }
+    void szintLepes()
+    {
+        if (ero > kezdeti_ero)
+        {
+            ero = kezdeti_ero;
+            szint += 1;
+        }
+    }
+    // harc
+    Eloleny &operator>(Eloleny &eloleny)
+    {
+        if (this->szint > eloleny.get_szint())
+        {
+            ero += eloleny.get_ero();
+            return *this;
+        }
+        else if (this->szint < eloleny.get_szint())
+        {
+            eloleny.ero += this->kezdeti_ero;
+            return eloleny;
+        }
+        else
+        {
+            if (this->ero > eloleny.get_ero())
+            {
+                ero += eloleny.get_ero();
+                return *this;
+            }
+            else
+            {
+                eloleny.ero += this->kezdeti_ero;
+                return eloleny;
+            }
+        }
+    }
+    /*
+    Eloleny &operator-=(const Eloleny &eloleny)
+    {
+        auto elem = find(elolenyek.begin(), elolenyek.end(), eloleny);
+        if (elem != elolenyek.end())
+        {
+            elolenyek.erase(elem);
+        }
+        return *this;
+    }
+    const vector<Eloleny> &get_elolenyek() const
+    {
+        return elolenyek;
+    }*/
+
     /* bool operator>(const Eloleny &eloleny)
      {
          return false;

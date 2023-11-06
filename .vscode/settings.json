@@ -8,6 +8,13 @@
     "ostream": "cpp",
     "new": "cpp",
     "memory": "cpp",
-    "istream": "cpp"
+    "istream": "cpp",
+    "array": "cpp",
+    "string_view": "cpp",
+    "initializer_list": "cpp",
+    "utility": "cpp",
+    "deque": "cpp",
+    "string": "cpp",
+    "vector": "cpp"
   }
 }
