@@ -6,6 +6,7 @@
 using namespace std;
 class Palya
 {
+    bool nyertes = false;
     unsigned elolenyek_szama;
     unsigned korokszama;
     int meret;
@@ -18,7 +19,7 @@ public:
         for (int i = 0; i < meret; i++)
         {
             palya_tmp.push_back(vector<Eloleny *>());
-            palya.push_back(vector<Eloleny *>()); //
+            palya.push_back(vector<Eloleny *>());
             for (int j = 0; j < meret; j++)
             {
                 // a 2dim pálya feltöltése null elemmel
@@ -27,6 +28,12 @@ public:
             }
         }
     };
+    const bool &get_nyertes() const
+    {
+        return nyertes;
+    }
+
+    // rajzolja a pályát és az előlény szintjét
     void palya_rajzolas()
     {
         cout << "     ";
@@ -66,6 +73,8 @@ public:
             cout << endl;
         }
     }
+
+    // legenerálja az élőlényeket és belteszi a pályába
     void elolenyek_letrehozasa(const int &db)
     {
         elolenyek_szama = db;
@@ -82,10 +91,14 @@ public:
             palya[x][y] = new Eloleny(x, y);
         }
     }
+
+    // körök számát adja vissza
     const unsigned &get_korokszama() const
     {
         return korokszama;
     }
+
+    // a játék menete
     void jatek()
     {
         korokszama++;
@@ -96,8 +109,31 @@ public:
         {
             szintlepes();
         }
-
-        palya_rajzolas();
+        nyert_e();
+    }
+    // ha csak 1 előlény van akkor nem megy tovább a program, és kirajzolja a végeredményt
+    void nyert_e()
+    {
+        int tuleltek = 0;
+        for (int i = 0; i < meret; i++)
+        {
+            for (int j = 0; j < meret; j++)
+            {
+                if (palya[i][j] != nullptr)
+                {
+                    tuleltek += 1;
+                }
+            }
+        }
+        if (tuleltek > 1)
+        {
+            palya_rajzolas();
+        }
+        else
+        {
+            nyertes = true;
+            vegeredmeny();
+        }
     }
     void szintlepes()
     {
@@ -105,6 +141,7 @@ public:
         {
             for (int j = 0; j < meret; j++)
             {
+                // ha a helyen van élőlény akkor meghívja a szintLepes függvényt
                 if (palya[i][j] != nullptr)
                 {
                     palya[i][j]->szintLepes();
@@ -125,8 +162,9 @@ public:
                 }
                 else if (palya[i][j] != nullptr && palya_tmp[i][j] != nullptr)
                 {
-                    // a pályában elmentem azt az elemet ami erősebb
-                    // derefálást végzek ->*(palya_tmp[i][j])
+                    // a pályában elmentem azt az elemet ami erősebb (a pálya címét beállítom)
+                    // derefálást végzek, hogy hozzáférjek a tényleges objektumhoz -> *(palya_tmp[i][j])
+                    //& pedig az eredényre mutató pointert adom át
                     palya[i][j] = &(palya[i][j]->operator>(*(palya_tmp[i][j])));
                     elolenyek_szama -= 1;
                 }
@@ -137,6 +175,8 @@ public:
             }
         }
     }
+
+    // csak a palya_tmp ben lévő elemeket törli ki
     void tmp_torles()
     {
         for (int i = 0; i < meret; i++)
@@ -156,8 +196,10 @@ public:
         {
             for (int j = 0; j < meret; j++)
             {
+                // csak annyi léptetést hajt végre amennyi élőlény van
                 if (palya[i][j] != nullptr && count < elolenyek_szama)
                 {
+                    // egy előlényt többször nem léptethet
                     if (!palya[i][j]->get_lepett())
                     {
                         // 0 fel 1 le 2 jobra 3 balra
@@ -171,6 +213,7 @@ public:
                             if (i == 0)
                             {
                                 e->change_hely(i + 1, j);
+                                // ha van valaki a pályán akkor az ideiglenes pályára teszi a játék a lényt
                                 if (palya[i + 1][j] == nullptr)
                                 {
                                     palya[i + 1][j] = e;
@@ -305,13 +348,15 @@ public:
             }
         }
     }
+
+    // játék vége kiratás
     void vegeredmeny()
     {
         int tuleltek = 0;
         int x, y;
         cout << "" << endl;
-        cout << "Akik tuletek:" << endl;
-        cout << "---------------------------" << endl;
+        cout << "Akik tuleltek:" << endl;
+        cout << "---------------------------------------" << endl;
         for (int i = 0; i < meret; i++)
         {
             for (int j = 0; j < meret; j++)
@@ -322,17 +367,17 @@ public:
                     x = i;
                     y = j;
                     cout << tuleltek << ". "
-                         << "szintje: " << palya[i][j]->get_szint() << " ereje: "
-                         << palya[i][j]->get_ero() << " helye: " << i << " , " << j << endl;
+                         << "szintje: " << palya[i][j]->get_szint() << ", ereje: "
+                         << palya[i][j]->get_ero() << ", helye: " << palya[i][j]->get_x() << " , " << palya[i][j]->get_y() << endl;
                 }
             }
         }
         if (tuleltek == 1)
         {
             cout << "A nyertes eloleny:" << endl;
-            cout << "---------------------------" << endl;
-            cout << "szintje: " << palya[x][y]->get_szint() << " ereje: "
-                 << palya[x][y]->get_ero() << " helye: " << x << " , " << y << endl;
+            cout << "---------------------------------------" << endl;
+            cout << "szintje: " << palya[x][y]->get_szint() << ", ereje: "
+                 << palya[x][y]->get_ero() << ", helye: " << palya[x][y]->get_x() << " , " << palya[x][y]->get_y() << endl;
         }
     }
     ~Palya()

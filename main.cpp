@@ -23,6 +23,7 @@ int main(int argc, char const *argv[])
     bool osszes_kor_hiba = false;
 
     // pálya méret beolvasása és hiba kezelése
+
     while (!palyameret_hiba)
     {
         try
@@ -51,15 +52,16 @@ int main(int argc, char const *argv[])
         }
         catch (invalid_argument &error)
         {
-            cerr << "Konvertalasi hiba: " << error.what() << '\n';
+            cerr << "Konvertalasi hiba " << '\n';
         }
         catch (const out_of_range &e)
         {
-            cerr << "Tul hosszu szamot adott meg " << e.what() << '\n';
+            cerr << "Tul hosszu szamot adott meg " << '\n';
         }
     }
 
     // jatekosok számának beolvasása és hiba kezelése
+
     while (!eloleny_hiba)
     {
         try
@@ -100,6 +102,9 @@ int main(int argc, char const *argv[])
             cerr << "Tul hosszu szamot adott meg" << '\n';
         }
     }
+
+    // körök számának beolvasása és hiba kezelése
+
     while (!osszes_kor_hiba)
     {
         try
@@ -126,7 +131,7 @@ int main(int argc, char const *argv[])
         }
         catch (const invalid_argument &e)
         {
-            cerr << "Konvertalasi hiba: " << '\n';
+            cerr << "Konvertalasi hiba " << '\n';
         }
         catch (const out_of_range &e)
         {
@@ -138,10 +143,12 @@ int main(int argc, char const *argv[])
         }
     }
 
+    // játék lérehozása
     Palya palya(palyameret);
     palya.elolenyek_letrehozasa(eloleny_szama);
     palya.palya_rajzolas();
     string valasz;
+    // játék menete
     while (palya.get_korokszama() < osszes_korok_szama)
     {
         try
@@ -153,23 +160,36 @@ int main(int argc, char const *argv[])
                  << endl;
             cout << "Menu opciok:" << endl;
             cout << "------------------------------------" << endl;
-            cout << "1 - [Enter] Jatek folytatasa" << endl;
-            cout << "2 - k Kilepes" << endl;
+            cout << "1 - Enter, Jatek folytatasa" << endl;
+            cout << "2 - k, Kilepes" << endl;
             getline(cin, valasz);
             if (valasz == "" || valasz == "1")
             {
                 palya.jatek();
+                // ha van nyertes akkor vége lesz a játéknak
+                if (palya.get_nyertes())
+                {
+                    break;
+                }
             }
             else if (valasz == "2" || valasz == "k")
             {
                 break;
             }
+            else
+            {
+                throw sajathiba("Nem megfelelo ertek");
+            }
         }
-        catch (const exception &e)
+        catch (const sajathiba &e)
         {
             cerr << e.what() << '\n';
         }
     }
-    palya.vegeredmeny();
+    // játék végeredényének a kiratása
+    if (!(valasz == "k" || valasz == "2"))
+    {
+        palya.vegeredmeny();
+    }
     return 0;
 }

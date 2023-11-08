@@ -1,0 +1,23 @@
+Az evolúciós játék:
+
+A fordításhoz szükséges scrpit:g++ -o jatek -Wall main.cpp rand/rand.cpp 
+A forítás helyes lefutához a fő mappában (ahol a main.cpp található) kell futtatni.
+A futtatható állományt a fő mappába fog kerülni és onnan el lehet indítani. 
+
+A játék 3 kérdést fog feltenni:
+    1. a játék tér mérete: ha nem ad meg semmit akkor 8,ha viszont ad akkor 2 és 15 között
+    2. az élőlények száma: ha nem ad meg semmit akkor véletlen 2 és a tábla méretének a kétszerese között
+    ,ha ad akkor 2 és a tábla kétszeres mérete között
+    3.a játék ciklusainak száma: ha nem ad meg semmit akkor 20, különben 1 feletti éréket adhat (a max az unsigned max értéke)
+
+Az enter vagy az 1 gomb lenyomásával lehet léptetni a játékot.
+A 2 vagy k gombal lehet kilépni a játékból.
+
+Az élőlények lerakása oszloponként végződik.
+Az élőlények ereje véletlen szerűen lehet 0 és 100 között.
+Az élőlények 10 játékciklusonként szintet lépnek ha valakit legyőztek, kezdeti ereje kisebb mint a mostani ereje.
+
+A játék addig megy ameddik a körök száma kisebb mint a játék körök száma vagy ha csak 1 élőlény maradt.
+A játék végén kiírja a megmaradt élőlényeket és annak adatait.
+
+

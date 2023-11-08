@@ -16,11 +16,12 @@ public:
     {
         kezdeti_ero = ero;
     };
-    Eloleny() : lepett(false), szint(1), x(0), y(0), ero(Randomszam::getRandom(0, 100))
+    /*Eloleny() : lepett(false), szint(1), x(0), y(0), ero(Randomszam::getRandom(0, 100))
     {
         kezdeti_ero = ero;
-    };
+    };*/
 
+    // hely változtatása
     void change_hely(const int &x, const int &y)
     {
         this->x = x;
@@ -58,7 +59,8 @@ public:
             szint += 1;
         }
     }
-    // harc
+    // visszadja azt az élőlényt amelyik nagyobb szintű vagy több erővel rendelkezik
+    // az erősebb ereje növekszik a gyengébb erejével
     Eloleny &operator>(Eloleny &eloleny)
     {
         if (this->szint > eloleny.get_szint())
